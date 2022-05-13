@@ -11,7 +11,7 @@ const getAllProducts = async () => {
 const getById = async (id) => {
   const productId = await productsModel.getById(id);
 
-  if (productId.length === 0) throw errorConstructor(404, 'Produto não encontrada');
+  if (productId.length === 0) throw errorConstructor(404, 'Product not found');
   
   return productId;
 };

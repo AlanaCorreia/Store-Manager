@@ -3,7 +3,7 @@ const { expect } = require('chai');
 const serviceProducts = require('../../../services/productsService');
 const controllerProducts = require('../../../controllers/productsController');
 
-describe('Testa a camada de controller dos produtos a função productsList', () => { 
+describe('Testa ao chamar o controller de productsList', () => { 
   describe('se retorna um array', () => { 
     const req = {};
     const res = {};

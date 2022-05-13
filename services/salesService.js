@@ -11,7 +11,7 @@ const getAllSales = async () => {
 const getById = async (id) => {
   const salesId = await salesModel.getById(id);
 
-  if (salesId.length === 0) throw errorConstructor(404, 'Venda não encontrada');
+  if (salesId.length === 0) throw errorConstructor(404, 'Sale not found');
   
   return salesId;
 };
