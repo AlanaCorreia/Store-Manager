@@ -40,9 +40,9 @@ const validateQuantitySale = (req, res, next) => {
 };
 
 const validateProductId = (req, res, next) => {
-  const { productId } = req.body;
+  const [{ productId }] = req.body;
 
-  if (productId === undefined) return res.status(400).json({ message: '"productId" is required' });
+  if (!productId) return res.status(400).json({ message: '"productId" is required' });
 
   next();
 };
