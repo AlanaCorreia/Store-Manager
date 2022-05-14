@@ -16,4 +16,24 @@ const getById = async (id) => {
   return productId;
 };
 
-module.exports = { getAllProducts, getById };
+const createProduct = async (name, quantity) => {
+  const findProduct = await productsModel.getProductByName(name);
+  
+  if (findProduct.length !== 0) throw errorConstructor(409, 'Product already exists');
+
+  const product = await productsModel.createProduct(name, quantity);
+  
+  return product;
+};
+
+const updateProduct = async (id, upProduct) => {
+  const productId = await productsModel.getById(id);
+
+  if (productId.length === 0) throw errorConstructor(404, 'Product not found');
+
+  const product = await productsModel.updateProduct(id, upProduct);
+  
+  return product;
+};
+
+module.exports = { getAllProducts, getById, createProduct, updateProduct };

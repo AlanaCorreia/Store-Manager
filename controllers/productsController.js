@@ -22,4 +22,28 @@ const productIdList = async (req, res, next) => {
   }
 };
 
-module.exports = { productsList, productIdList };
+const createProduct = async (req, res, next) => {
+  try {
+    const { name, quantity } = req.body;
+    const newProduct = await productsService.createProduct(name, quantity);
+  
+    return res.status(201).json(newProduct);
+  } catch (err) {
+    console.log('err cretae product', err.message);
+    next(err);
+  }
+};
+
+const updateProduct = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const upProduct = await productsService.updateProduct(id, req.body);
+  
+    return res.status(200).json(upProduct);
+  } catch (err) {
+    console.log('err update product', err.message);
+    next(err);
+  }
+};
+
+module.exports = { productsList, productIdList, createProduct, updateProduct };

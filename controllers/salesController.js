@@ -1,6 +1,6 @@
 const salesService = require('../services/salesService');
 
-const salesList = async (req, res) => {
+const salesList = async (_req, res) => {
   const products = await salesService.getAllSales();
   
   res.status(200).json(products);
@@ -19,4 +19,28 @@ const salestIdList = async (req, res, next) => {
   }
 };
 
-module.exports = { salesList, salestIdList };
+const createSale = async (req, res, next) => {
+  try {
+    const newSale = await salesService.createSale(req.body);
+  
+    return res.status(201).json(newSale);
+  } catch (err) {
+    console.log('err create sale', err.message);
+    next(err);
+  }
+};
+
+const updateSale = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const upSale = await salesService.updateSale(id, req.body);
+  
+    return res.status(200).json(upSale);
+  } catch (err) {
+    console.log('err update sale', err.message);
+    next(err);
+  }
+};
+
+module.exports = { salesList, salestIdList, createSale, updateSale };
