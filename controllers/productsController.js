@@ -46,4 +46,16 @@ const updateProduct = async (req, res, next) => {
   }
 };
 
-module.exports = { productsList, productIdList, createProduct, updateProduct };
+const deleteProduct = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    await productsService.deleteProduct(id);
+
+    return res.status(204).end();
+  } catch (err) {
+    console.log('err delete product', err.message);
+    next(err);
+  }
+};
+
+module.exports = { productsList, productIdList, createProduct, updateProduct, deleteProduct };
