@@ -31,11 +31,22 @@ const createSale = async () => {
 }; 
 
 const createSaleProduct = async (saleId, productId, quantity) => {
-  console.log('id', saleId);
   await connection.execute(
     'INSERT INTO StoreManager.sales_products (sale_id, product_id, quantity) VALUES (?, ?, ?);',
     [saleId, productId, quantity],
   );
 };
 
-module.exports = { getAll, getById, createSale, createSaleProduct };
+// const updateSale = async (id, productId, quantity) => {
+//   await connection.execute(`UPDATE StoreManager.sales_products
+//     SET product_id = ?, quantity = ? WHERE sale_id = ?;`, [productId, quantity, id]);
+// };
+
+const deleteSaleProduct = async (saleId) => {
+  await connection.execute(
+    'DELETE FROM StoreManager.sales_products WHERE sale_id = ?;',
+    [saleId],
+  );
+};
+
+module.exports = { getAll, getById, createSale, createSaleProduct, deleteSaleProduct };

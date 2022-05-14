@@ -32,11 +32,24 @@ const createSale = async (newSale) => {
 };
 
 const updateSale = async (id, upData) => {
-  const salesId = await salesModel.getById(id);
+  await salesModel.deleteSaleProduct(id);
 
-  if (salesId.length === 0) throw errorConstructor(404, 'Sale not found');
-  
-  return { id, upData };
+  Promise.all(upData
+    .map(({ productId, quantity }) => salesModel.createSaleProduct(id, productId, quantity)));
+ 
+  const result = {
+    saleId: Number(id),
+    itemUpdated: upData,
+  };
+
+  return result;
 };
 
 module.exports = { getAllSales, getById, createSale, updateSale };
+
+// const salesId = await salesModel.getById(id);
+
+// if (salesId.length === 0) throw errorConstructor(404, 'Sale not found');
+
+// Promise.all(upData
+//   .map(({ productId, quantity }) => salesModel.updateSale(id, productId, quantity)));
