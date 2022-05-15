@@ -43,37 +43,38 @@ describe('Testa ao chamar o controller de productIdList', () => {
   describe('Quando existe o produto no banco de dados', () => { 
     const req = {};
     const res = {};
+    const next = () => {};
 
-    const mockProduct = {
+    const mockProduct = [{
       "id": 1,
       "name": "Martelo de Thor",
       "quantity": 10
-    }
+    }];
 
     before(() => {
       req.params = { id: 1 };
       res.status = sinon.stub().returns(res);
       res.json = sinon.stub().returns();
-      sinon.stub(serviceProducts, 'getAllProducts').resolves(mockProduct);
+      sinon.stub(serviceProducts, 'getById').resolves(mockProduct);
     });
 
     after(() => {
-      serviceProducts.getAllProducts.restore();
+      serviceProducts.getById.restore();
     });
 
     it('é chamado o status com o código 200', async () => {
-      await controllerProducts.productIdList(req, res);
+      await controllerProducts.productIdList(req, res, next);
       expect(res.status.calledWith(200)).to.be.equal(true);
     });
 
     it('é chamado o json com um objeto', async () => {
-      await controllerProducts.productIdList(req, res);
+      await controllerProducts.productIdList(req, res, next);
       expect(res.json.calledWith(sinon.match.object)).to.be.equal(true);
     });
 
     it('se objeto têm as propriedades id: 1, name: "Martelo de Thor" e quantity: 10', async () => {
-      await controllerProducts.productIdList(req, res);
-      expect(res.json.calledWith(sinon.match(mockProduct))).to.be.equal(true);
+      await controllerProducts.productIdList(req, res, next);
+      expect(res.json.calledWith(sinon.match(mockProduct[0]))).to.be.equal(true);
     });
   });
 }) 

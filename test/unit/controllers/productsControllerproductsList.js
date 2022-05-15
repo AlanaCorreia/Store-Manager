@@ -4,7 +4,7 @@ const serviceProducts = require('../../../services/productsService');
 const controllerProducts = require('../../../controllers/productsController');
 
 describe('Testa ao chamar o controller de productsList', () => {
-  describe('No retorno do banco de dados', () => { 
+  describe('Quando existe o produto no banco de dados', () => { 
     const req = {};
     const res = {};
 
@@ -45,6 +45,40 @@ describe('Testa ao chamar o controller de productsList', () => {
       await controllerProducts.productsList(req, res);
       expect(res.json.calledWith(sinon.match.array)).to.be.equal(true);
     });
+
+    it('que o array contem objetos com os produtos', async () => {
+      await controllerProducts.productsList(req, res);
+      expect(res.json.calledWith(mockProducts)).to.be.equal(true);;
+    });
   });
-   
+  
+  describe('Quando não existe o produtos no banco de dados', () => { 
+    const req = {};
+    const res = {};
+
+    before(() => {
+      res.status = sinon.stub().returns(res);
+      res.json = sinon.stub().returns();
+      sinon.stub(serviceProducts, 'getAllProducts').resolves([]);
+    });
+
+    after(() => {
+      serviceProducts.getAllProducts.restore();
+    });
+
+    it('é chamado o status com o código 200', async () => {
+      await controllerProducts.productsList(req, res);
+      expect(res.status.calledWith(200)).to.be.equal(true);
+    });
+
+    it('é chamado o json com um array', async () => {
+      await controllerProducts.productsList(req, res);
+      expect(res.json.calledWith(sinon.match.array)).to.be.equal(true);
+    });
+
+    it('o array é vazio', async () => {
+      await controllerProducts.productsList(req, res);
+      expect(res.json.calledWith([])).to.be.equal(true);
+    });
+  });
 })
