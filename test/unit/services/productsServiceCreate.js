@@ -13,11 +13,13 @@ describe('Testa ao chamar o service com a createProduct', () => {
     };
 
     before(() => {
+      sinon.stub(modelProducts, 'getProductByName').resolves([]);
       sinon.stub(modelProducts, 'createProduct').resolves(mockProduct);
     });
 
     after(() => {
       modelProducts.createProduct.restore();
+      modelProducts.getProductByName.restore();
     });
 
     it('é um object', async () => {
@@ -32,18 +34,26 @@ describe('Testa ao chamar o service com a createProduct', () => {
   });
 
   describe('Quando já existe o produto com o nome fornecido no banco de dados', () => {
-    const mockProduct = [{
+    const mockProductGetByName = [{
       "id": 1,
       "name": "Martelo de Thor",
-      "quantity": 10
+      "quantity": 10,
     }]
 
     before(() => {
-      sinon.stub(modelProducts, 'getProductByName').resolves(mockProduct);
+      sinon.stub(modelProducts, 'getProductByName').resolves(mockProductGetByName);
     });
 
     after(() => {
       modelProducts.getProductByName.restore();
+    });
+
+    it('é chamado um objeto', async () => {
+      try {
+        await serviceProducts.createProduct('Martelo de Thor', 15);
+      } catch (error) {
+        expect(error).to.be.a('object');
+      }
     });
    
     it('é chamado um objeto com o código 409', async () => {
