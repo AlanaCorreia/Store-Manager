@@ -42,4 +42,30 @@ describe('Testa ao chamar no service a função getById', () => {
       expect(dataSale).to.have.all.keys('date', 'productId', 'quantity');
     });
   });
+
+  describe('Quando não existe a venda no banco de dados', () => {
+    before(() => {
+      sinon.stub(modelSales, 'getById').resolves([]);
+    });
+
+    after(() => {
+      modelSales.getById.restore();
+    });
+
+    it('é chamado um objeto com o código 404', async () => {
+      try {
+        await serviceSales.getById(20);
+      } catch (error) {
+        expect(error.status).to.be.equal(404);
+      }
+    });
+
+    it('é chamado um objeto com a mensagem de erro', async () => {
+      try {
+        await serviceSales.getById(20);
+      } catch (error) {
+        expect(error.message).to.be.equal('Sale not found');
+      }
+    });
+  });
 });
