@@ -36,9 +36,7 @@ describe('Testa ao chamar o controller de productIdList', () => {
         await controllerProducts.productIdList(req, res, next);
       } catch (error) {
          expect(error.message.calledWith('Product not found')).to.be.equal(true);
-      }
-      
-     
+      }     
     });
   });
 
@@ -68,9 +66,14 @@ describe('Testa ao chamar o controller de productIdList', () => {
       expect(res.status.calledWith(200)).to.be.equal(true);
     });
 
-    it('é chamado o json com um objeto contendo o produtos', async () => {
+    it('é chamado o json com um objeto', async () => {
       await controllerProducts.productIdList(req, res);
       expect(res.json.calledWith(sinon.match.object)).to.be.equal(true);
     });
+
+    it('se objeto têm as propriedades id: 1, name: "Martelo de Thor" e quantity: 10', async () => {
+      await controllerProducts.productIdList(req, res);
+      expect(res.json.calledWith(sinon.match(mockProduct))).to.be.equal(true);
+    });
   });
-})
+}) 
