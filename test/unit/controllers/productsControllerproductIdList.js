@@ -35,7 +35,7 @@ describe('Testa ao chamar o controller de productIdList', () => {
       try {
         await controllerProducts.productIdList(req, res, next);
       } catch (error) {
-         expect(error.message.calledWith('Product not found')).to.be.equal(true);
+        expect(error.message.calledWith('Product not found')).to.be.equal(true);
       }     
     });
   });
